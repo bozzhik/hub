@@ -1,9 +1,9 @@
-import {Elysia, t} from 'elysia'
+import {hubRoute} from '@/routes/hub'
+
+const someRoute = new Elysia().get('/some', () => 'hey, some route')
+
+import {Elysia} from 'elysia'
 
 export default new Elysia()
-  .get('/', () => 'hey mom')
-  .post('/', ({body}) => body, {
-    body: t.Object({
-      name: t.String(),
-    }),
-  })
+  .use(hubRoute) // endpoint: (/)
+  .use(someRoute)
