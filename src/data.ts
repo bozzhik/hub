@@ -16,6 +16,11 @@ export const projects: Project[] = [
     status: 'dev',
   },
   {
+    name: 'zero',
+    description: 'minimal classless CSS framework inspired by shadcn.com',
+    status: 'prod',
+  },
+  {
     name: 'snable',
     description: 'chrome extension for collecting visual elements from websites',
     status: 'prod',

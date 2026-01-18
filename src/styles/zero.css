@@ -1,0 +1,192 @@
+/* BareHTML CSS v1.1 - Monospace-only version */
+
+/* Импорт Geist Mono (weights 100–900) */
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  line-height: 1.5;
+  color: #000000;
+  background-color: #ffffff;
+  margin: 8px;
+}
+
+/* Headings — тоже monospace, жирность через weight */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit;
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+h2 {
+  font-size: 2em;
+  font-weight: 600;
+}
+h3 {
+  font-size: 1.6em;
+  font-weight: 500;
+}
+h4 {
+  font-size: 1.3em;
+}
+h5 {
+  font-size: 1.1em;
+}
+h6 {
+  font-size: 1em;
+  font-weight: 400;
+}
+
+/* Текст */
+p {
+  margin-bottom: 1em;
+}
+
+blockquote {
+  margin: 1em 2em;
+  padding-left: 1em;
+  border-left: 3px solid #000;
+  font-style: normal;
+}
+
+pre,
+code,
+kbd,
+samp {
+  font-family: inherit;
+  background-color: #f5f5f5;
+  padding: 0.1em 0.3em;
+}
+
+pre {
+  padding: 1em;
+  overflow: auto;
+  border: 1px solid #ddd;
+}
+
+/* Ссылки — классика */
+a {
+  color: #0000ff;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #800080;
+}
+
+a:hover,
+a:active {
+  color: #ff0000;
+}
+
+/* Списки */
+ul,
+ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+ul {
+  list-style-type: disc;
+}
+ol {
+  list-style-type: decimal;
+}
+
+/* Таблицы */
+table {
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+th,
+td {
+  border: 1px solid #000;
+  padding: 0.5em;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
+
+/* Формы — всё в моно */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+input[type='url'],
+input[type='number'],
+textarea,
+select {
+  font-family: inherit;
+  font-size: 1em;
+  padding: 0.4em 0.6em;
+  border: 1px solid #000;
+  background: #fff;
+}
+
+input[type='submit'],
+input[type='button'],
+button {
+  font-family: inherit;
+  font-weight: 500;
+  padding: 0.4em 0.8em;
+  border: 1px solid #000;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+button:hover,
+input[type='submit']:hover,
+input[type='button']:hover {
+  background: #e0e0e0;
+}
+
+/* Дополнительно */
+hr {
+  border: 0;
+  border-top: 1px solid #000;
+  margin: 1.5em 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  margin: 1em 0;
+  text-align: center;
+}
+
+figcaption {
+  font-size: 0.9em;
+  color: #444;
+}
+
+/* Фокус */
+:focus {
+  outline: 2px solid #000;
+  outline-offset: -2px;
+}
