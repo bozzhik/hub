@@ -4,7 +4,7 @@ import {Elysia} from 'elysia'
 
 import {pingEndpoint} from '@/api/endpoints/ping'
 import {docsEndpoint} from '@/api/endpoints/docs'
-
+import {demoStaticEndpoint} from '@/api/endpoints/demo-static'
 /**
  * API Composition Root
  *
@@ -22,5 +22,7 @@ export const api = new Elysia({prefix: '/api'})
   .use(pingEndpoint)
   // docs endpoint (openapi) – [/api/docs]
   .use(docsEndpoint(BASE_URL))
+  // demo static endpoint (static file) – [/api/demo-static]
+  .use(demoStaticEndpoint)
 
 export type Api = typeof api
