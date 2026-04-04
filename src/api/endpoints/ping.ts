@@ -16,25 +16,26 @@ const pingResponseSchema = t.Object({
   }),
 })
 
-export const pingEndpoint = new Elysia().get(
-  '/ping',
-  () => {
-    const now = new Date()
+export const PingEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
+  app.get(
+    '/ping',
+    () => {
+      const now = new Date()
 
-    return {
-      ok: true,
-      service: SERVICE_NAME as typeof SERVICE_NAME,
-      status: 'healthy',
-      timestamp: now.toISOString(),
-      timestampFormatted: toFormattedTimestamp(now),
-    }
-  },
-  {
-    response: pingResponseSchema,
-    detail: {
-      summary: 'Ping endpoint',
-      description: 'Quick health check for API availability and server time',
-      operationId: 'getPing',
+      return {
+        ok: true,
+        service: SERVICE_NAME as typeof SERVICE_NAME,
+        status: 'healthy',
+        timestamp: now.toISOString(),
+        timestampFormatted: toFormattedTimestamp(now),
+      }
     },
-  },
-)
+    {
+      response: pingResponseSchema,
+      detail: {
+        summary: 'Ping endpoint',
+        description: 'Quick health check for API availability and server time',
+        operationId: 'getPing',
+      },
+    },
+  )

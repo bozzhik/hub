@@ -15,29 +15,30 @@ const demoStaticResponseSchema = t.Object({
   }),
 })
 
-export const demoStaticEndpoint = new Elysia()
-  .use(
-    staticPlugin({
-      assets: staticRoot,
-      prefix: '/demo/static/files',
-      indexHTML: false,
-    }),
-  )
-  .get(
-    '/demo/static',
-    () => ({
-      endpoint: '/api/demo/static',
-      message: 'This is a static storage demo. You can download a sample file from the URL below.',
-      file: {
-        downloadUrl: new URL(markdownFilePath, BASE_URL).toString(),
+export const DemoStaticEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
+  app
+    .use(
+      staticPlugin({
+        assets: staticRoot,
+        prefix: '/demo/static/files',
+        indexHTML: false,
+      }),
+    )
+    .get(
+      '/demo/static',
+      () => ({
+        endpoint: '/api/demo/static',
+        message: 'This is a static storage demo. You can download a sample file from the URL below.',
+        file: {
+          downloadUrl: new URL(markdownFilePath, BASE_URL).toString(),
+        },
+      }),
+      {
+        response: demoStaticResponseSchema,
+        detail: {
+          summary: 'Static storage demo endpoint',
+          description: 'Returns JSON with links to static downloadable files.',
+          operationId: 'getDemoStatic',
+        },
       },
-    }),
-    {
-      response: demoStaticResponseSchema,
-      detail: {
-        summary: 'Static storage demo endpoint',
-        description: 'Returns JSON with links to static downloadable files.',
-        operationId: 'getDemoStatic',
-      },
-    },
-  )
+    )

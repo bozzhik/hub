@@ -2,10 +2,10 @@ import {BASE_URL} from '@/api/lib/constants'
 
 import {Elysia} from 'elysia'
 
-import {pingEndpoint} from '@/api/endpoints/ping'
-import {docsEndpoint} from '@/api/endpoints/docs'
-import {demoStaticEndpoint} from '@/api/endpoints/demo-static'
-import {demoHtmlEndpoint} from '@/api/endpoints/demo-html'
+import {PingEndpoint} from '@/api/endpoints/ping'
+import {DocsEndpoint} from '@/api/endpoints/docs'
+import {DemoStaticEndpoint} from '@/api/endpoints/demo-static'
+import {DemoHtmlEndpoint} from '@/api/endpoints/demo-html'
 
 /**
  * API Composition Root
@@ -19,14 +19,17 @@ import {demoHtmlEndpoint} from '@/api/endpoints/demo-html'
  * - src/server/api/lib/http/                 -> response helpers / error formatters
  */
 
-export const api = new Elysia({prefix: '/api'})
-  // ping endpoint (health check) – [/api/ping]
-  .use(pingEndpoint)
-  // docs endpoint (openapi) – [/api/docs]
-  .use(docsEndpoint(BASE_URL))
-  // demo static endpoint (static file) – [/api/demo/static]
-  .use(demoStaticEndpoint)
-  // demo html endpoint (json/html) – [/api/demo/html]
-  .use(demoHtmlEndpoint)
+const app = new Elysia({prefix: '/api'})
+
+// ping endpoint (health check) – [/api/ping]
+PingEndpoint(app)
+// docs endpoint (openapi) – [/api/docs]
+DocsEndpoint(app, BASE_URL)
+// demo static endpoint (static file) – [/api/demo/static]
+DemoStaticEndpoint(app)
+// demo html endpoint (json/html) – [/api/demo/html]
+DemoHtmlEndpoint(app)
+
+export const api = app
 
 export type Api = typeof api

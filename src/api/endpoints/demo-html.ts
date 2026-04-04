@@ -3,38 +3,39 @@ import html from '@elysiajs/html'
 
 import {createLayout, LAYOUT_STYLESHEETS, type LayoutStylesheet} from '@/api/lib/html-layout'
 
-const STYLE_KEYS = ['pico', 'water', 'sakura', 'almond', 'tacit'] as const
+const STYLE_KEYS = Object.keys(LAYOUT_STYLESHEETS) as LayoutStylesheet[]
 
 const isLayoutStylesheet = (value: string): value is LayoutStylesheet => STYLE_KEYS.includes(value as (typeof STYLE_KEYS)[number])
 
-export const demoHtmlEndpoint = new Elysia().use(html()).get(
-  '/demo/html',
-  ({request}) => {
-    const accept = request.headers.get('accept') ?? ''
-    const wantsJson = accept.includes('application/json') && !accept.includes('text/html')
+export const DemoHtmlEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
+  app.use(html()).get(
+    '/demo/html',
+    ({request}) => {
+      const accept = request.headers.get('accept') ?? ''
+      const wantsJson = accept.includes('application/json') && !accept.includes('text/html')
 
-    const url = new URL(request.url)
-    const stylesheetParam = url.searchParams.get('stylesheet') ?? undefined
+      const url = new URL(request.url)
+      const stylesheetParam = url.searchParams.get('stylesheet') ?? undefined
 
-    const selectedStylesheet = stylesheetParam && isLayoutStylesheet(stylesheetParam) ? stylesheetParam : 'pico'
+      const selectedStylesheet = stylesheetParam && isLayoutStylesheet(stylesheetParam) ? stylesheetParam : 'pico'
 
-    const customStyles = url.searchParams.get('styles') ?? undefined
+      const customStyles = url.searchParams.get('styles') ?? undefined
 
-    if (wantsJson) {
-      return {
-        endpoint: '/api/demo/html',
-        mode: 'json' as const,
-        message: 'Send Accept: text/html to get rendered Hub HTML content.',
-        availableStylesheets: [...STYLE_KEYS],
-        selectedStylesheet,
-        customStylesProvided: Boolean(customStyles),
+      if (wantsJson) {
+        return {
+          endpoint: '/api/demo/html',
+          mode: 'json' as const,
+          message: 'Send Accept: text/html to get rendered Hub HTML content.',
+          availableStylesheets: [...STYLE_KEYS],
+          selectedStylesheet,
+          customStylesProvided: Boolean(customStyles),
+        }
       }
-    }
 
-    return new Response(
-      createLayout(
-        'Hub API – Demo HTML',
-        `
+      return new Response(
+        createLayout(
+          'Hub API – Demo HTML',
+          `
       <header>
         <h1>Hub</h1>
         <p>A compact workspace for ideas, experiments, and fast product drafts.</p>
@@ -159,23 +160,23 @@ goal: ship clear interfaces</code></pre>
         })();
       </script>
     `,
+          {
+            stylesheet: selectedStylesheet,
+            styles: customStyles,
+          },
+        ),
         {
-          stylesheet: selectedStylesheet,
-          styles: customStyles,
+          headers: {
+            'content-type': 'text/html; charset=utf-8',
+          },
         },
-      ),
-      {
-        headers: {
-          'content-type': 'text/html; charset=utf-8',
-        },
-      },
-    )
-  },
-  {
-    detail: {
-      summary: 'Hub HTML demo with dynamic stylesheet and custom CSS',
-      description: 'Returns JSON for API clients and rendered HTML for browsers. Supports query params: stylesheet, styles.',
-      operationId: 'getDemoHtml',
+      )
     },
-  },
-)
+    {
+      detail: {
+        summary: 'Hub HTML demo with dynamic stylesheet and custom CSS',
+        description: 'Returns JSON for API clients and rendered HTML for browsers. Supports query params: stylesheet, styles.',
+        operationId: 'getDemoHtml',
+      },
+    },
+  )
