@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "bozzhik's hub and sandbox",
 }
 
+import YandexMetrika from '@/components/analytics'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,7 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+
+        {process.env.NODE_ENV === 'production' && <YandexMetrika />}
+      </body>
     </html>
   )
 }
