@@ -4,6 +4,8 @@ const STYLESHEETS = {
   sakura: 'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css',
   almond: 'https://cdn.jsdelivr.net/gh/alvaromontoro/almond.css@latest/dist/almond.lite.min.css',
   tacit: 'https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.9.5.min.css',
+  zero: '/api/style/presets/zero.css',
+  mini: '/api/style/presets/mini.css',
 }
 
 export type LayoutStylesheet = keyof typeof STYLESHEETS

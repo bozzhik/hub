@@ -1,0 +1,278 @@
+/* zero-css: plain retro HTML style with vivid classic links */
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --zero-bg: #ffffff;
+  --zero-surface: #f3f3f3;
+  --zero-fg: #111111;
+  --zero-muted: #4a4a4a;
+  --zero-border: #111111;
+  --zero-border-soft: #cfcfcf;
+  --zero-link: #0000ee;
+  --zero-link-visited: #551a8b;
+  --zero-link-active: #ff0000;
+  --zero-focus: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --zero-bg: #0b0b0b;
+    --zero-surface: #171717;
+    --zero-fg: #f2f2f2;
+    --zero-muted: #b8b8b8;
+    --zero-border: #d7d7d7;
+    --zero-border-soft: #525252;
+    --zero-link: #4da3ff;
+    --zero-link-visited: #c084fc;
+    --zero-link-active: #ff6b6b;
+    --zero-focus: #f2f2f2;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--zero-bg);
+  color: var(--zero-fg);
+  font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+  line-height: 1.45;
+}
+
+main.container {
+  width: min(960px, calc(100% - 1rem));
+  margin: 0.9rem auto 2.4rem;
+}
+
+main.container > * + * {
+  margin-top: 0.7rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.45em;
+  line-height: 1.18;
+  font-family: inherit;
+}
+
+* + h1,
+* + h2,
+* + h3,
+* + h4,
+* + h5,
+* + h6 {
+  margin-top: 1.15em;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+h4 {
+  font-size: 1.1rem;
+}
+
+h5,
+h6 {
+  font-size: 1rem;
+}
+
+p,
+ul,
+ol,
+dl,
+blockquote,
+pre,
+table,
+figure,
+details {
+  margin: 0 0 1rem;
+}
+
+small,
+figcaption {
+  color: var(--zero-muted);
+}
+
+ul,
+ol {
+  padding-left: 2rem;
+}
+
+a {
+  color: var(--zero-link);
+  text-decoration: underline;
+}
+
+a:visited {
+  color: var(--zero-link-visited);
+}
+
+a:hover,
+a:active {
+  color: var(--zero-link-active);
+}
+
+hr {
+  margin: 1.3rem 0;
+  border: 0;
+  border-top: 1px solid var(--zero-border);
+}
+
+article,
+section,
+form,
+details {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--zero-border-soft);
+  background: var(--zero-surface);
+}
+
+blockquote {
+  margin-left: 0;
+  padding: 0.55rem 0.75rem;
+  border-left: 3px solid var(--zero-border);
+  background: var(--zero-surface);
+}
+
+code,
+kbd,
+samp {
+  padding: 0.08rem 0.25rem;
+  border: 1px solid var(--zero-border-soft);
+  background: var(--zero-surface);
+}
+
+pre {
+  padding: 0.75rem;
+  border: 1px solid var(--zero-border);
+  background: var(--zero-surface);
+  overflow: auto;
+}
+
+pre code {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.4rem 0.52rem;
+  border: 1px solid var(--zero-border);
+  text-align: left;
+}
+
+th {
+  background: var(--zero-surface);
+}
+
+label {
+  display: inline-block;
+  margin: 0 0 0.35rem;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  width: min(40rem, 100%);
+  padding: 0.33rem 0.45rem;
+  border: 1px solid var(--zero-border);
+  background: var(--zero-bg);
+  color: var(--zero-fg);
+}
+
+textarea {
+  min-height: 7rem;
+}
+
+button,
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
+  padding: 0.28rem 0.55rem;
+  border: 1px solid var(--zero-border);
+  background: var(--zero-surface);
+  color: var(--zero-fg);
+  cursor: pointer;
+}
+
+button:hover,
+input[type='button']:hover,
+input[type='submit']:hover,
+input[type='reset']:hover {
+  filter: brightness(0.95);
+}
+
+button:active,
+input[type='button']:active,
+input[type='submit']:active,
+input[type='reset']:active {
+  filter: brightness(0.9);
+}
+
+progress,
+meter {
+  width: min(26rem, 100%);
+}
+
+summary {
+  cursor: pointer;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  margin-left: 0;
+}
+
+:focus-visible {
+  outline: 2px dotted var(--zero-focus);
+  outline-offset: 1px;
+}
+
+@media (max-width: 720px) {
+  main.container {
+    width: calc(100% - 0.7rem);
+    margin-bottom: 1.8rem;
+  }
+}
