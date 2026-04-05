@@ -6,6 +6,7 @@ import {PingEndpoint} from '@/api/endpoints/ping'
 import {DocsEndpoint} from '@/api/endpoints/docs'
 import {DemoStaticEndpoint} from '@/api/endpoints/demo-static'
 import {DemoHtmlEndpoint} from '@/api/endpoints/demo-html'
+import {StyleEndpoint} from '@/api/endpoints/style'
 
 /**
  * API Composition Root
@@ -29,6 +30,8 @@ DocsEndpoint(app, BASE_URL)
 DemoStaticEndpoint(app)
 // demo html endpoint (json/html) – [/api/demo/html]
 DemoHtmlEndpoint(app)
+// style endpoint (json/html) – [/api/style]
+StyleEndpoint(app)
 
 export const api = app
 
