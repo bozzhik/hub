@@ -1,21 +1,6 @@
-import type {Metadata} from 'next'
-import {Geist, Geist_Mono} from 'next/font/google'
+export {metadata} from '@/lib/layout.config'
+import {geistSans, geistMono} from '@/lib/layout.config'
 import './globals.css'
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
-
-export const metadata: Metadata = {
-  title: 'hub',
-  description: "bozzhik's hub and sandbox",
-}
 
 import {ConvexProvider} from '@/lib/convex/provider'
 
