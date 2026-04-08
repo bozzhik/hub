@@ -6,7 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:gen": "node scripts/gen-db-meta.mjs",
+    "db:sync": "bun db:gen && bun convex:codegen",
+    "db:push": "bun db:gen && bun convex:once",
+    "db:dev": "bun db:sync && bun convex:dev",
+    "convex:codegen": "bunx convex codegen",
+    "convex:dev": "bunx convex dev",
+    "convex:once": "bunx convex dev --once",
+    "convex": "bun convex:dev",
+    "codegen": "bun convex:codegen"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
