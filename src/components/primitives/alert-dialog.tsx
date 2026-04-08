@@ -32,7 +32,18 @@ function AlertDialogContent({
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
-      <AlertDialogPrimitive.Popup data-slot="alert-dialog-content" data-size={size} className={cn('group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95', className)} {...props} />
+      <AlertDialogPrimitive.Popup
+        data-slot="alert-dialog-content"
+        data-size={size}
+        className={cn(
+          'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full min-w-0 -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none',
+          'data-[size=default]:max-w-xs data-[size=sm]:max-w-xs',
+          'max-h-[min(28rem,85dvh)] overflow-y-auto overflow-x-hidden xl:max-h-[min(24rem,82dvh)] sm:max-w-[calc(100vw-1.25rem)] sm:max-h-[90dvh] sm:p-3',
+          'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+          className,
+        )}
+        {...props}
+      />
     </AlertDialogPortal>
   )
 }
@@ -42,7 +53,18 @@ function AlertDialogHeader({className, ...props}: React.ComponentProps<'div'>) {
 }
 
 function AlertDialogFooter({className, ...props}: React.ComponentProps<'div'>) {
-  return <div data-slot="alert-dialog-footer" className={cn('-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end', className)} {...props} />
+  return (
+    <div
+      data-slot="alert-dialog-footer"
+      className={cn(
+        '-mx-4 -mb-4 flex flex-row gap-2 rounded-b-xl border-t bg-muted/50 p-4',
+        '*:min-w-0 *:flex-1 [&_button]:w-full',
+        'sm:flex-col-reverse sm:items-stretch sm:gap-3 sm:*:w-full sm:*:flex-none',
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function AlertDialogMedia({className, ...props}: React.ComponentProps<'div'>) {
@@ -58,7 +80,17 @@ function AlertDialogDescription({className, ...props}: React.ComponentProps<type
 }
 
 function AlertDialogAction({className, ...props}: React.ComponentProps<typeof Button>) {
-  return <Button data-slot="alert-dialog-action" className={cn(className)} {...props} />
+  return (
+    <Button
+      {...props}
+      data-slot="alert-dialog-action"
+      variant="default"
+      className={cn(
+        'border-transparent bg-destructive text-primary-foreground hover:bg-destructive/90 focus-visible:border-destructive/50 focus-visible:ring-destructive/30 dark:focus-visible:ring-destructive/40',
+        className,
+      )}
+    />
+  )
 }
 
 function AlertDialogCancel({className, variant = 'outline', size = 'default', ...props}: AlertDialogPrimitive.Close.Props & Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'>) {
