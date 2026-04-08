@@ -5,8 +5,10 @@ import './globals.css'
 import {cn} from '@/lib/utils'
 
 import {ConvexProvider} from '@/lib/convex/provider'
+import {TooltipProvider} from '~/primitives/tooltip'
 
-import YandexMetrika from '@/components/analytics'
+import YandexMetrika from '~/globals/analytics'
+import {Toaster} from '~/primitives/sonner'
 
 export default function RootLayout({
   children,
@@ -16,7 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn([geistSans.variable, geistMono.variable], 'dark', 'h-full antialiased', 'font-sans')}>
       <body className="min-h-full flex flex-col">
-        <ConvexProvider>{children}</ConvexProvider>
+        <ConvexProvider>
+          <TooltipProvider>
+            {children}
+
+            <Toaster />
+          </TooltipProvider>
+        </ConvexProvider>
 
         {process.env.NODE_ENV === 'production' && <YandexMetrika />}
       </body>
