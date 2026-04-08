@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "bozzhik's hub and sandbox",
 }
 
+import {ConvexProvider} from '@/lib/convex/provider'
+
 import YandexMetrika from '@/components/analytics'
 
 export default function RootLayout({
@@ -27,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        {children}
+        <ConvexProvider>{children}</ConvexProvider>
 
         {process.env.NODE_ENV === 'production' && <YandexMetrika />}
       </body>
