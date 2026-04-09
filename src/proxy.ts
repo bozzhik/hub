@@ -20,7 +20,7 @@ import {NextResponse} from 'next/server'
 import {SignJWT, jwtVerify} from 'jose'
 
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365
-const ACCESS_COOKIE_NAME = 'access-token'
+export const ACCESS_COOKIE_NAME = 'access-token'
 
 type MiddlewareMatcher = string
 
@@ -127,5 +127,5 @@ export const config = {
   // Must be statically analyzable by Next.js at build time.
   // Keep this list minimal: only paths that may require auth should be matched.
   // NOTE: matcher must be a static literal (Next.js requirement).
-  matcher: ['/demo-convex', '/db', '/db/:slug'],
+  matcher: ['/db', '/db/:slug', '/ai', '/demo-convex'],
 }
