@@ -23,3 +23,5 @@ After editing `convex/schema.ts`:
 # one shot: regen DB base blocks + meta + Convex API/types
 bun db:sync
 ```
+
+- сделать ai эндпоинт с бесплатными моделями

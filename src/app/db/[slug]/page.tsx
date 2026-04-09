@@ -21,6 +21,7 @@ import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Di
 import {Empty, EmptyDescription, EmptyHeader, EmptyTitle} from '~/primitives/empty'
 import {Field, FieldContent, FieldGroup, FieldTitle} from '~/primitives/field'
 import {Input} from '~/primitives/input'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '~/primitives/select'
 import {Spinner} from '~/primitives/spinner'
 import {Switch} from '~/primitives/switch'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '~/primitives/table'
@@ -65,6 +66,19 @@ function DatabaseTablePageInner({slug}: {slug: string}) {
   const [createDraft, setCreateDraft] = useState<Record<string, unknown>>({})
   const [editDraft, setEditDraft] = useState<Record<string, unknown>>({})
 
+  function parseCsvTags(input: string): string[] {
+    return input
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  }
+
+  function formatCsvTags(value: unknown): string {
+    if (typeof value === 'string') return value
+    if (!Array.isArray(value)) return ''
+    return value.map(String).join(', ')
+  }
+
   function resetCreate() {
     setCreateDraft({})
     setCreateOpen(false)
@@ -78,7 +92,14 @@ function DatabaseTablePageInner({slug}: {slug: string}) {
   async function onCreate() {
     const doc: Record<string, unknown> = {}
     for (const [name, m] of fields) {
-      if (createDraft[name] !== undefined) doc[name] = createDraft[name]
+      if (createDraft[name] !== undefined) {
+        if (name === 'tags' && typeof createDraft[name] === 'string') {
+          const parsed = parseCsvTags(createDraft[name] as string)
+          if (parsed.length) doc[name] = parsed
+        } else {
+          doc[name] = createDraft[name]
+        }
+      }
       else if (!m.optional) doc[name] = defaultValueForField(m)
     }
     await createMut({doc} as never)
@@ -87,7 +108,12 @@ function DatabaseTablePageInner({slug}: {slug: string}) {
 
   async function onUpdate() {
     if (!editRow) return
-    await updateMut({id: editRow._id, patch: editDraft} as never)
+    const patch: Record<string, unknown> = {...editDraft}
+    if (typeof patch.tags === 'string') {
+      const parsed = parseCsvTags(patch.tags)
+      patch.tags = parsed
+    }
+    await updateMut({id: editRow._id, patch} as never)
     setEditRow(null)
     setEditDraft({})
   }
@@ -133,6 +159,24 @@ function DatabaseTablePageInner({slug}: {slug: string}) {
                   }
 
                   if (kind === 'unknown' || kind === 'object' || kind === 'array' || kind === 'record' || kind === 'union') {
+                    if (name === 'tags' && kind === 'array' && 'of' in m && m.of.kind === 'string') {
+                      const current = createDraft[name]
+                      return (
+                        <Field key={name}>
+                          <FieldTitle>{label}</FieldTitle>
+                          <FieldContent>
+                            <Input
+                              value={formatCsvTags(current)}
+                              onChange={(e) => {
+                                const raw = e.target.value
+                                setCreateDraft((d) => ({...d, [name]: raw}))
+                              }}
+                              placeholder="comma-separated tags (e.g. nextjs, convex, cli)"
+                            />
+                          </FieldContent>
+                        </Field>
+                      )
+                    }
                     return (
                       <Field key={name}>
                         <FieldTitle>{label}</FieldTitle>
@@ -144,11 +188,23 @@ function DatabaseTablePageInner({slug}: {slug: string}) {
                   }
 
                   if (kind === 'enum' && 'values' in m) {
+                    const selected = typeof createDraft[name] === 'string' ? (createDraft[name] as string) : null
                     return (
                       <Field key={name}>
                         <FieldTitle>{label}</FieldTitle>
                         <FieldContent>
-                          <Input value={typeof createDraft[name] === 'string' ? (createDraft[name] as string) : String(createDraft[name] ?? '')} onChange={(e) => setCreateDraft((d) => ({...d, [name]: e.target.value}))} placeholder={`one of: ${m.values.join(', ')}`} />
+                          <Select value={selected} onValueChange={(val) => setCreateDraft((d) => ({...d, [name]: val ?? undefined}))}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder={`Select ${name}`} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {m.values.map((val) => (
+                                <SelectItem key={String(val)} value={String(val)}>
+                                  {String(val)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </FieldContent>
                       </Field>
                     )
@@ -283,11 +339,51 @@ function DatabaseTablePageInner({slug}: {slug: string}) {
                                       }
 
                                       if (kind === 'unknown' || kind === 'object' || kind === 'array' || kind === 'record' || kind === 'union') {
+                                        if (name === 'tags' && kind === 'array' && 'of' in m && m.of.kind === 'string') {
+                                          return (
+                                            <Field key={name}>
+                                              <FieldTitle>{label}</FieldTitle>
+                                              <FieldContent>
+                                                <Input
+                                                  value={formatCsvTags(value)}
+                                                  onChange={(e) => {
+                                                    const raw = e.target.value
+                                                    setEditDraft((d) => ({...d, [name]: raw}))
+                                                  }}
+                                                  placeholder="comma-separated tags (e.g. nextjs, convex, cli)"
+                                                />
+                                              </FieldContent>
+                                            </Field>
+                                          )
+                                        }
                                         return (
                                           <Field key={name}>
                                             <FieldTitle>{label}</FieldTitle>
                                             <FieldContent>
                                               <Textarea value={typeof value === 'string' ? value : formatDbAdminCellValue(value ?? '')} onChange={(e) => setEditDraft((d) => ({...d, [name]: e.target.value}))} placeholder="JSON / text" />
+                                            </FieldContent>
+                                          </Field>
+                                        )
+                                      }
+
+                                      if (kind === 'enum' && 'values' in m) {
+                                        const selected = typeof value === 'string' ? value : null
+                                        return (
+                                          <Field key={name}>
+                                            <FieldTitle>{label}</FieldTitle>
+                                            <FieldContent>
+                                              <Select value={selected} onValueChange={(val) => setEditDraft((d) => ({...d, [name]: val ?? undefined}))}>
+                                                <SelectTrigger className="w-full">
+                                                  <SelectValue placeholder={`Select ${name}`} />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                  {m.values.map((val) => (
+                                                    <SelectItem key={String(val)} value={String(val)}>
+                                                      {String(val)}
+                                                    </SelectItem>
+                                                  ))}
+                                                </SelectContent>
+                                              </Select>
                                             </FieldContent>
                                           </Field>
                                         )

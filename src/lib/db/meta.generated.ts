@@ -17,6 +17,16 @@ export const dbMeta = {
       "username": {"kind":"string","optional":false},
     },
   },
+  "concepts": {
+    fields: {
+      "token": {"kind":"string","optional":false},
+      "summary": {"kind":"string","optional":false},
+      "details": {"kind":"string","optional":true},
+      "priority": {"kind":"enum","valueType":"string","values":["low","medium","high","urgent"],"optional":false},
+      "status": {"kind":"enum","valueType":"string","values":["draft","review","ready","in_progress","done","rejected"],"optional":false},
+      "tags": {"kind":"array","of":{"kind":"string","optional":false},"optional":true},
+    },
+  },
 } as const
 
 export type DbMeta = typeof dbMeta

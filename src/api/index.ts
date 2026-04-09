@@ -7,6 +7,7 @@ import {DocsEndpoint} from '@/api/endpoints/docs'
 import {DemoStaticEndpoint} from '@/api/endpoints/demo-static'
 import {DemoHtmlEndpoint} from '@/api/endpoints/demo-html'
 import {StyleEndpoint} from '@/api/endpoints/style'
+import {ConceptsEndpoint} from '@/api/endpoints/concepts'
 
 /**
  * API Composition Root
@@ -32,6 +33,8 @@ DemoStaticEndpoint(app)
 DemoHtmlEndpoint(app)
 // style endpoint (json/html) – [/api/style]
 StyleEndpoint(app)
+// concepts endpoint (guide) – [/api/concepts]
+ConceptsEndpoint(app)
 
 export const api = app
 

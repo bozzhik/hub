@@ -3,7 +3,7 @@
 import {api} from '@/lib/convex'
 import type {TableNames} from '@convex/_generated/dataModel'
 
-export const dbTables = ["demo"] as const
+export const dbTables = ["demo", "concepts"] as const
 export type DbTable = (typeof dbTables)[number]
 
 export const dbAdminApi = {
@@ -14,6 +14,14 @@ export const dbAdminApi = {
     create: api.tables.demo.create,
     update: api.tables.demo.update,
     remove: api.tables.demo.remove,
+  },
+  "concepts": {
+    length: api.tables.concepts.length,
+    list: api.tables.concepts.list,
+    getById: api.tables.concepts.getById,
+    create: api.tables.concepts.create,
+    update: api.tables.concepts.update,
+    remove: api.tables.concepts.remove,
   },
 } as const satisfies Record<
   DbTable,
