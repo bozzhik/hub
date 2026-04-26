@@ -31,9 +31,18 @@ export function formatConvexCreationTime(ts: unknown) {
 const SHORT_ID_HEAD = 7
 const SHORT_ID_TAIL = 6
 
-export function shortConvexDocumentId(id: string) {
-  if (id.length <= SHORT_ID_HEAD + SHORT_ID_TAIL + 1) return id
-  return `${id.slice(0, SHORT_ID_HEAD)}…${id.slice(-SHORT_ID_TAIL)}`
+export function shortConvexDocumentId(
+  id: string,
+  opts?: {
+    head?: number
+    tail?: number
+  },
+) {
+  const head = opts?.head ?? SHORT_ID_HEAD
+  const tail = opts?.tail ?? SHORT_ID_TAIL
+  if (head < 0 || tail < 0) return id
+  if (id.length <= head + tail + 1) return id
+  return `${id.slice(0, head)}…${id.slice(-tail)}`
 }
 
 export function coerceDbAdminFieldInput(kind: string, raw: string, checked?: boolean): unknown {
