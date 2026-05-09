@@ -68,6 +68,12 @@ export const DemoHtmlEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
           <li>Readable project structure</li>
           <li>Reliable validation checks</li>
         </ul>
+        <p>
+          Useful links:
+          <a href="/api/style?format=html">Style docs</a>,
+          <a href="/api/style?format=css&stylesheet=mini">Mini stylesheet</a>,
+          <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank" rel="noreferrer">HTML reference</a>.
+        </p>
       </section>
 
       <section>
@@ -82,6 +88,7 @@ export const DemoHtmlEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
       <section>
         <h3>Iteration Summary</h3>
         <table>
+          <caption>Current system readiness</caption>
           <thead>
             <tr>
               <th>Area</th>
@@ -107,6 +114,32 @@ export const DemoHtmlEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
             </tr>
           </tbody>
         </table>
+      </section>
+
+      <section>
+        <h3>Semantic Coverage Check</h3>
+        <p>
+          This <mark>highlighted note</mark> includes an <abbr title="Application Programming Interface">API</abbr>
+          term, a <strong>strong statement</strong>, and <em>emphasized text</em>.
+          It also shows H<sub>2</sub>O and x<sup>2</sup>.
+        </p>
+        <dl>
+          <dt>Term</dt>
+          <dd>Definition rendering check.</dd>
+          <dt>Status</dt>
+          <dd><del>Draft</del> <ins>Stabilizing</ins></dd>
+        </dl>
+        <fieldset>
+          <legend>Fieldset Check</legend>
+          <label for="demo-email">Email</label>
+          <input id="demo-email" type="email" placeholder="name@example.com" />
+          <label for="demo-role">Role</label>
+          <select id="demo-role">
+            <option>Designer</option>
+            <option>Engineer</option>
+            <option>Product</option>
+          </select>
+        </fieldset>
       </section>
 
       <details>

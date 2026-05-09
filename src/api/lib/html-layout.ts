@@ -1,11 +1,13 @@
+const LOCAL_STYLESHEET_VERSION = '2026-05-03-v3'
+
 const STYLESHEETS = {
   pico: 'https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css',
   water: 'https://cdn.jsdelivr.net/npm/water.css@2/out/water.css',
   sakura: 'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css',
   almond: 'https://cdn.jsdelivr.net/gh/alvaromontoro/almond.css@latest/dist/almond.lite.min.css',
   tacit: 'https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css-1.9.5.min.css',
-  zero: '/api/style/presets/zero.css',
-  mini: '/api/style/presets/mini.css',
+  zero: `/api/style/presets/zero.css?v=${LOCAL_STYLESHEET_VERSION}`,
+  mini: `/api/style/presets/mini.css?v=${LOCAL_STYLESHEET_VERSION}`,
 }
 
 export type LayoutStylesheet = keyof typeof STYLESHEETS

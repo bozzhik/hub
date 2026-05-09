@@ -13,6 +13,9 @@
   --zero-link-visited: #551a8b;
   --zero-link-active: #ff0000;
   --zero-focus: #000000;
+  --zero-space-1: 0.56rem;
+  --zero-space-2: 1rem;
+  --zero-space-3: 1.05rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,7 +50,7 @@ body {
   background: var(--zero-bg);
   color: var(--zero-fg);
   font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
-  line-height: 1.45;
+  line-height: 1.55;
 }
 
 main.container {
@@ -66,7 +69,7 @@ h4,
 h5,
 h6 {
   margin: 0 0 0.45em;
-  line-height: 1.18;
+  line-height: 1.25;
   font-family: inherit;
 }
 
@@ -112,6 +115,10 @@ details {
   margin: 0 0 1rem;
 }
 
+:where(article, section, form, details, fieldset) > * + * {
+  margin-top: var(--zero-space-2);
+}
+
 small,
 figcaption {
   color: var(--zero-muted);
@@ -125,15 +132,26 @@ ol {
 a {
   color: var(--zero-link);
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 a:visited {
   color: var(--zero-link-visited);
 }
 
-a:hover,
+a:hover {
+  color: var(--zero-link-active);
+  text-decoration-thickness: 2px;
+}
+
 a:active {
   color: var(--zero-link-active);
+}
+
+a:focus-visible {
+  outline: 1px dotted var(--zero-focus);
+  outline-offset: 2px;
 }
 
 hr {
@@ -166,6 +184,45 @@ samp {
   background: var(--zero-surface);
 }
 
+mark {
+  padding: 0.08rem 0.28rem;
+  border: 1px solid var(--zero-border-soft);
+  background: #dbeafe;
+  color: #111111;
+}
+
+@media (prefers-color-scheme: dark) {
+  mark {
+    background: #1e3a8a;
+    color: #e0e7ff;
+  }
+}
+
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+dt {
+  font-weight: 700;
+}
+
+dd {
+  margin: 0.2rem 0 0.65rem 1.2rem;
+}
+
+fieldset {
+  margin: 0 0 1rem;
+  padding: var(--zero-space-2);
+  border: 1px solid var(--zero-border);
+  border-radius: 12px;
+}
+
+legend {
+  padding: 0 0.2rem;
+  font-weight: 700;
+}
+
 pre {
   padding: 0.75rem;
   border: 1px solid var(--zero-border);
@@ -181,13 +238,19 @@ pre code {
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--zero-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--zero-bg);
 }
 
 th,
 td {
   padding: 0.4rem 0.52rem;
-  border: 1px solid var(--zero-border);
+  border: 0;
+  border-bottom: 1px solid var(--zero-border);
   text-align: left;
 }
 
@@ -195,9 +258,34 @@ th {
   background: var(--zero-surface);
 }
 
+thead th + th,
+tbody td + td {
+  border-left: 1px solid var(--zero-border);
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+thead th:first-child {
+  border-top-left-radius: 13px;
+}
+
+thead th:last-child {
+  border-top-right-radius: 13px;
+}
+
+tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 13px;
+}
+
+tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 13px;
+}
+
 label {
-  display: inline-block;
-  margin: 0 0 0.35rem;
+  display: block;
+  margin: 0;
 }
 
 input,
@@ -207,14 +295,28 @@ button {
   font: inherit;
 }
 
+:where(fieldset, form, section, article, details) > :is(label, input:not([type='checkbox']):not([type='radio']), select, textarea, button, progress, meter)
++ :is(label, input:not([type='checkbox']):not([type='radio']), select, textarea, button, progress, meter) {
+  margin-top: var(--zero-space-2);
+}
+
 input:not([type='checkbox']):not([type='radio']),
 textarea,
 select {
-  width: min(40rem, 100%);
-  padding: 0.33rem 0.45rem;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.56rem 0.62rem;
   border: 1px solid var(--zero-border);
   background: var(--zero-bg);
   color: var(--zero-fg);
+  margin: 0;
+  border-radius: 10px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--zero-muted);
 }
 
 textarea {
@@ -225,11 +327,15 @@ button,
 input[type='button'],
 input[type='submit'],
 input[type='reset'] {
+  display: inline-flex;
+  align-items: center;
   padding: 0.28rem 0.55rem;
   border: 1px solid var(--zero-border);
   background: var(--zero-surface);
   color: var(--zero-fg);
   cursor: pointer;
+  margin: 0;
+  border-radius: 10px;
 }
 
 button:hover,
@@ -249,6 +355,12 @@ input[type='reset']:active {
 progress,
 meter {
   width: min(26rem, 100%);
+}
+
+table caption {
+  padding: 0.35rem 0 0.45rem;
+  color: var(--zero-muted);
+  text-align: left;
 }
 
 summary {

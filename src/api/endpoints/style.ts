@@ -13,17 +13,15 @@ const isLayoutStylesheet = (value: string): value is LayoutStylesheet => STYLE_K
 const escapeHtml = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
 
 const buildCssHref = (requestUrl: URL, stylesheet: LayoutStylesheet, customStyle?: string) => {
-  const cssUrl = new URL(requestUrl)
-  cssUrl.search = ''
-  cssUrl.searchParams.set('format', 'css')
-  cssUrl.searchParams.set('stylesheet', stylesheet)
-  if (customStyle) cssUrl.searchParams.set('style', customStyle)
-  return cssUrl.toString()
+  const search = new URLSearchParams()
+  search.set('format', 'css')
+  search.set('stylesheet', stylesheet)
+  if (customStyle) search.set('style', customStyle)
+  return `${requestUrl.pathname}?${search.toString()}`
 }
 
-const resolveStylesheetUrl = (requestUrl: URL, stylesheet: LayoutStylesheet) => {
-  const source = LAYOUT_STYLESHEETS[stylesheet]
-  return new URL(source, requestUrl.origin).toString()
+const resolveStylesheetHref = (stylesheet: LayoutStylesheet) => {
+  return LAYOUT_STYLESHEETS[stylesheet]
 }
 
 export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
@@ -33,6 +31,10 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
         assets: stylesheetsRoot,
         prefix: '/style/presets',
         indexHTML: false,
+        headers: {
+          'content-type': 'text/css; charset=utf-8',
+          'cache-control': 'no-store',
+        },
       }),
     )
     .use(html())
@@ -44,10 +46,12 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
 
         const stylesheetParam = url.searchParams.get('stylesheet') ?? undefined
         const selectedStylesheet = stylesheetParam && isLayoutStylesheet(stylesheetParam) ? stylesheetParam : 'pico'
-        const resolvedStylesheetUrl = resolveStylesheetUrl(url, selectedStylesheet)
+        const resolvedStylesheetHref = resolveStylesheetHref(selectedStylesheet)
         const customStyle = url.searchParams.get('style') ?? url.searchParams.get('styles') ?? undefined
+
         const cssHref = buildCssHref(url, selectedStylesheet, customStyle)
-        const stylesheetHrefMap = Object.fromEntries(STYLE_KEYS.map((key) => [key, resolveStylesheetUrl(url, key)]))
+        const cssHrefAbsolute = new URL(cssHref, url.origin).toString()
+        const stylesheetHrefMap = Object.fromEntries(STYLE_KEYS.map((key) => [key, resolveStylesheetHref(key)]))
 
         const formatParam = url.searchParams.get('format')
         const wantsHtml = formatParam === 'html' || (formatParam !== 'css' && formatParam !== 'json' && accept.includes('text/html'))
@@ -61,7 +65,8 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
             availableStylesheets: [...STYLE_KEYS],
             customStyleProvided: Boolean(customStyle),
             stylesheetLink: cssHref,
-            sourceStylesheetUrl: resolvedStylesheetUrl,
+            stylesheetLinkAbsolute: cssHrefAbsolute,
+            sourceStylesheetUrl: resolvedStylesheetHref,
             usage: {
               htmlLinkTag: `<link rel="stylesheet" href="${cssHref}">`,
               queryParams: {
@@ -74,9 +79,10 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
         }
 
         if (!wantsHtml) {
-          return new Response(`@import url("${resolvedStylesheetUrl}");\n\n${customStyle ?? ''}`.trimEnd(), {
+          return new Response(`@import url("${resolvedStylesheetHref}");\n\n${customStyle ?? ''}`.trimEnd(), {
             headers: {
               'content-type': 'text/css; charset=utf-8',
+              'cache-control': 'no-store',
             },
           })
         }
@@ -117,7 +123,7 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
       <section>
         <h2>Query Params</h2>
         <ul>
-        <li><code>format</code> — <code>css</code>, <code>json</code>, <code>html</code></li>
+          <li><code>format</code> — <code>css</code>, <code>json</code>, <code>html</code></li>
           <li><code>stylesheet</code> — preset key (${STYLE_KEYS.map((key) => `<code>${key}</code>`).join(', ')})</li>
           <li><code>style</code> — optional custom CSS (URL encoded)</li>
         </ul>
@@ -141,9 +147,7 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
         <pre><code id="generated-href">${escapedCssHref}</code></pre>
       </section>
 
-
-
-            <script>
+      <script>
         (() => {
           const stylesheetMap = ${JSON.stringify(stylesheetHrefMap)};
           const picker = document.getElementById('stylesheet-picker');
@@ -179,6 +183,7 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
 
           picker.addEventListener('change', refreshHref);
           cssEditor.addEventListener('input', refreshHref);
+
           switchButtons.forEach((button) => {
             button.addEventListener('click', () => {
               const nextStyle = button.getAttribute('data-style');
@@ -187,6 +192,7 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
               refreshHref();
             });
           });
+
           refreshHref();
         })();
       </script>
@@ -198,6 +204,7 @@ export const StyleEndpoint = <Prefix extends string>(app: Elysia<Prefix>) =>
           {
             headers: {
               'content-type': 'text/html; charset=utf-8',
+              'cache-control': 'no-store',
             },
           },
         )
